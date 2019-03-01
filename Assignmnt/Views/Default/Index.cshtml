@@ -1,0 +1,49 @@
+﻿@model Assignmnt.Models.Cascade
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm("Index", "Default", FormMethod.Post))
+{
+    <label> Name  @Html.TextBox("name")</label>
+    <br />
+    <br />
+    <label>Address @Html.TextBox("address")</label>
+        <br />
+        <br />
+
+        <label>Gender @Html.RadioButton(" ", false)Male</label>
+        <label>@Html.RadioButton(" ", true)Female</label>
+        <br />
+        <br />
+        @Html.DropDownListFor(m => m.StateId, Model.States, "Please select", new { onchange = "document.forms[0].submit();" })
+        <br />
+        <br />
+
+        @Html.DropDownListFor(m => m.CityId, Model.Cities, "Please select", new { onchange = "document.forms[0].submit();", disabled = "disabled" })
+        <br />
+        <br />
+
+        <input type="submit" value="Submit" />
+        }
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                if ($("#StateId option").length > 1) {
+                    $("#StateId").removeAttr("disabled");
+                }
+
+                if ($("#CityId option").length > 1) {
+                    $("#CityId").removeAttr("disabled");
+                }
+
+                if ($("#StateId").val() != "" && $("#CityId").val() != "") {
+                    var message = "\nState: " + $("#StateId option:selected").text();
+                    message += "\nCity: " + $("#CityId option:selected").text();                    
+                    alert(message);
+                }
+            });
+        </script>
+
