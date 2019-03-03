@@ -4,46 +4,139 @@
     ViewBag.Title = "Index";
 }
 
+<meta name="viewport" content="width=device-width" />
+
+<title>Index</title>
+
+<script src="~/script/jquery-1.7.1.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#state").change(function () {
+
+            var id = $(this).val();
+
+            $("#city").empty();
+
+            $.get("City_Bind", { stateId: id }, function (data) {
+
+                var v = "<option>---Select---</option>";
+
+                $.each(data, function (i, v1) {
+
+                    v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
+
+                });
+
+                $("#city").html(v);
+
+            });
+
+        });
+
+    });
+
+</script>
+
 <h2>Index</h2>
 @using (Html.BeginForm("Index", "Default", FormMethod.Post))
 {
-    <label> Name  @Html.TextBox("name")</label>
-    <br />
-    <br />
-    <label>Address @Html.TextBox("address")</label>
-        <br />
-        <br />
+    <div class="form-horizontal">
+        <h4>Employees</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(x => x.getstu.name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(x => x.getstu.name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.getstu.name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.getstu.address, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(x => x.getstu.address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.getstu.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.getstu.gender, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+              Male @Html.RadioButtonFor(m => m.getstu.gender, "Male")
+                Female @Html.RadioButtonFor(m => m.getstu.gender, "Female")
+                @Html.ValidationMessageFor(x => x.getstu.gender, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.StateId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                  @Html.DropDownListFor(m => m.StateId,ViewBag.statelist as List<SelectListItem>, "Please select", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.CityId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.CityId, new SelectList(" "), "--Select City--", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>  
+    </div>
+}
 
-        <label>Gender @Html.RadioButton(" ", false)Male</label>
-        <label>@Html.RadioButton(" ", true)Female</label>
-        <br />
-        <br />
-        @Html.DropDownListFor(m => m.StateId, Model.States, "Please select", new { onchange = "document.forms[0].submit();" })
-        <br />
-        <br />
+            @*<div>
 
-        @Html.DropDownListFor(m => m.CityId, Model.Cities, "Please select", new { onchange = "document.forms[0].submit();", disabled = "disabled" })
-        <br />
-        <br />
+                    <div>
 
-        <input type="submit" value="Submit" />
-        }
-        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                if ($("#StateId option").length > 1) {
-                    $("#StateId").removeAttr("disabled");
-                }
+                        <b>State: </b>
 
-                if ($("#CityId option").length > 1) {
-                    $("#CityId").removeAttr("disabled");
-                }
+                        @Html.DropDownList("state", null, "---Select State----")<br />
 
-                if ($("#StateId").val() != "" && $("#CityId").val() != "") {
-                    var message = "\nState: " + $("#StateId option:selected").text();
-                    message += "\nCity: " + $("#CityId option:selected").text();                    
-                    alert(message);
-                }
-            });
-        </script>
+                    </div>
+
+                    <div>
+
+                        <b>City: </b>
+
+                        <select id="city"></select><br />
+
+                    </div>
+
+                </div>*@
+        
+            <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#StateId").change(function () {
+                        $.get("/Default/City_Bind", { StateId: $("#StateId").val() }, function (data) {
+                            $("#CityId").empty();
+                            $.each(data, function (index, row) {
+                                $("#CityId").append("<option value='" + row.id + "'>" + row.name + "</option>")
+                            });
+                        });
+                    })
+                });
+
+                //$(function () {
+                //    if ($("#StateId option").length > 1) {
+                //        $("#StateId").removeAttr("disabled");
+                //    }
+
+                //    if ($("#CityId option").length > 1) {
+                //        $("#CityId").removeAttr("disabled");
+                //    }
+
+                //    if ($("#StateId").val() != "" && $("#CityId").val() != "") {
+                //        var message = "\nState: " + $("#StateId option:selected").text();
+                //        message += "\nCity: " + $("#CityId option:selected").text();
+                //        alert(message);
+                //    }
+                //});
+            </script>
 

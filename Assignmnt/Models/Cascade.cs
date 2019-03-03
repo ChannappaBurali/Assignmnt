@@ -16,8 +16,10 @@ namespace Assignmnt.Models
       
         public List<SelectListItem> States { get; set; }
         public List<SelectListItem> Cities { get; set; }
+        public tblstud getstu { get; set; }
 
         public int StateId { get; set; }
         public int CityId { get; set; }
+
     }
 }
